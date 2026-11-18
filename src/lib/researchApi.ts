@@ -1,4 +1,4 @@
-import { supabaseAnonKey, supabaseUrl } from "./supabase";
+import { supabase, supabaseAnonKey, supabaseUrl } from "./supabase";
 
 // Thin client for the Research Lab edge functions.
 // Every research function takes POST {action, ...fields}. The caller is
@@ -56,13 +56,15 @@ export async function callResearch<T = Record<string, unknown>>(
   action: string,
   payload: Record<string, unknown> = {},
 ): Promise<T> {
-  const token = getResearchToken();
+  // Prefer the signed-in account's session; fall back to a pasted research token.
+  const { data } = await supabase.auth.getSession();
+  const bearer = data.session?.access_token ?? getResearchToken();
   const res = await fetch(`${supabaseUrl}/functions/v1/${fn}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       apikey: supabaseAnonKey,
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(bearer ? { Authorization: `Bearer ${bearer}` } : {}),
     },
     body: JSON.stringify({ action, ...payload }),
   });
@@ -98,6 +100,32 @@ export function getResearchToken(): string | null {
 export function setResearchToken(token: string | null) {
   if (token) localStorage.setItem(TOKEN_KEY, token);
   else localStorage.removeItem(TOKEN_KEY);
+}
+
+/**
+ * Ask the server to mail a token to a member's address. The response is the
+ * same whether or not the address is on the study team — the server never
+ * reveals membership — so the UI must show the neutral "check your inbox".
+ */
+export async function requestToken(email: string): Promise<void> {
+  const res = await fetch(`${supabaseUrl}/functions/v1/fn_research_access`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", apikey: supabaseAnonKey },
+    body: JSON.stringify({ action: "request_token", email }),
+  });
+  if (res.ok) return;
+  let body: Record<string, unknown> = {};
+  try {
+    body = await res.json();
+  } catch {
+    // non-JSON error body
+  }
+  throw new ResearchApiError(
+    String(body.error ?? `Request failed (${res.status})`),
+    res.status,
+    (body.code as string) ?? null,
+    body.details ?? null,
+  );
 }
 
 // Human-readable explanations for the error codes researchers are most

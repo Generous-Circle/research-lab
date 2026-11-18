@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
+import type { Session } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
 import { getResearchToken, setResearchToken } from "@/lib/researchApi";
 
 export interface LabUser {
@@ -7,33 +9,66 @@ export interface LabUser {
 }
 
 /**
- * Lab identity is a personal research token, not a Vetted account.
- * The token is issued by a study Admin and pasted once; it can be revoked
- * server-side at any time without touching anything else.
+ * The Lab accepts the account the member already has (email + password), and a
+ * personal research token as a fallback for scripts and lockouts. Either way the
+ * server decides whether the caller is on the study team.
  */
 export function useAuth() {
+  const [session, setSession] = useState<Session | null>(null);
   const [token, setToken] = useState<string | null>(() => getResearchToken());
-  const [user, setUser] = useState<LabUser | null>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (!token) {
-      setUser(null);
-      return;
-    }
-    // Email is shown by whoami; until then we only know a token is present.
-    setUser({ email: null, id: null });
-  }, [token]);
+    let cancelled = false;
+    void supabase.auth.getSession().then(({ data }) => {
+      if (cancelled) return;
+      setSession(data.session ?? null);
+      setReady(true);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
+      setSession(next);
+      if (next) {
+        // A signed-in account wins over a stale pasted token.
+        setResearchToken(null);
+        setToken(null);
+      }
+    });
+    return () => {
+      cancelled = true;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
 
-  const signIn = useCallback((next: string) => {
+  const signIn = useCallback(async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    if (error) throw new Error(error.message);
+  }, []);
+
+  const signInWithToken = useCallback((next: string) => {
     setResearchToken(next.trim());
     setToken(next.trim());
   }, []);
 
-  const signOut = useCallback(() => {
+  const signOut = useCallback(async () => {
     setResearchToken(null);
     setToken(null);
-    setUser(null);
+    await supabase.auth.signOut().catch(() => {});
   }, []);
 
-  return { token, user, signIn, signOut };
+  const user: LabUser | null = session?.user
+    ? { email: session.user.email ?? null, id: session.user.id }
+    : token
+      ? { email: null, id: null }
+      : null;
+
+  return {
+    ready,
+    user,
+    signedIn: Boolean(session || token),
+    /** The bearer the API client should send: account session first, token second. */
+    bearer: session?.access_token ?? token,
+    signIn,
+    signInWithToken,
+    signOut,
+  };
 }
