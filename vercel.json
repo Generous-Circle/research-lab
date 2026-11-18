@@ -4,7 +4,16 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "functions": {
+    "api/research_metrics.py": {
+      "includeFiles": "python/research_metrics/**",
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    { "source": "/api/research-metrics", "destination": "/api/research_metrics" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",
