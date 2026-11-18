@@ -56,3 +56,10 @@ public values in `.env.example`.
 See `CONTRIBUTING.md`. Short version: branch, PR, a Vetted reviewer merges.
 Metric changes need a second pair of eyes — a new number can flip a study
 conclusion.
+
+## Deployment
+
+- Vercel project: `vettedai-research-lab` (team `vetted-ai`)
+- Production domain: https://lab.vettedai.app, built from `main`
+- The same deployment serves `/api/research-metrics` (signed, `RESEARCH_METRICS_SIGNING_SECRET`)
+- Pushes to `main` deploy to production; pull requests get preview URLs
