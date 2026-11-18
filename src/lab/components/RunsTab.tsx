@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ModelCheckCell, ModelCheckHead } from "../modelCheck/RunsColumn";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -49,6 +50,7 @@ export function RunsTab({ who }: { who: WhoAmI }) {
                   <TableHead className="text-right">Answers × repeats</TableHead>
                   <TableHead>Progress</TableHead>
                   <TableHead>Status</TableHead>
+                  <ModelCheckHead />
                   <TableHead />
                 </TableRow>
               </TableHeader>
@@ -68,6 +70,7 @@ export function RunsTab({ who }: { who: WhoAmI }) {
                       {r.completed_count}/{r.projected_calls}
                     </TableCell>
                     <TableCell><RunStatusBadge status={r.status} /></TableCell>
+                    <ModelCheckCell runId={r.id} completed={r.status === "completed"} />
                     <TableCell className="text-right">
                       <Button asChild size="sm" variant="outline">
                         <Link to={`/research-lab/runs/${r.id}`}>Open</Link>

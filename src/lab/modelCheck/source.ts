@@ -27,7 +27,7 @@ function hash(s: string): number {
 /** Sample data picks a mock model by run id, so any run opens a result. */
 export function getModelCheckSource(runId: string): ModelCheckSource {
   if (!MOCK_ENABLED) return { state: "unavailable" };
-  const exact = MOCK_RUNS.find((m) => m.runId === runId);
+  const exact = MOCK_RUNS.find((m) => m.runId === runId || runId.endsWith(`-${m.runId}`));
   const run = exact ?? MOCK_RUNS[hash(runId) % MOCK_RUNS.length];
   return { state: "ready", input: run.input, scorerLabel: run.scorerLabel, isSample: true };
 }

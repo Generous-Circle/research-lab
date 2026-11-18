@@ -8,3 +8,7 @@ Pre-deployment check shown as the last step of a completed run: **Consistency te
 - To connect: provide per-skill stats (`ModelCheckInput` in `types.ts`) from `python/research_metrics` or from run exports, then return them from `getModelCheckSource`. Validate on synthetic data with known bias first.
 - Pass lines are set by the project team from the SoW; ICC and kappa bands (Koo and Li 2016, Landis and Koch 1977) should be verified against the sources.
 - Open: the Lab's "no overall pass/fail" principle must be agreed with VettedAI; paired datasets must be confirmed to need no human ratings for the variant side.
+
+## Static preview
+
+`npm run build -- -c vite.preview.config.ts` is not wired as a script. Run `npx vite build -c vite.preview.config.ts` with `VITE_MODEL_CHECK_MOCK=true` to build `preview.html`: the real Lab UI with a fake backend (`src/preview/`), for demos only. It does not affect the real build.

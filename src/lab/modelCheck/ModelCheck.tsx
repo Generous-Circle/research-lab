@@ -90,7 +90,7 @@ export function ModelCheckCard({ runId }: { runId: string }) {
   const result = useMemo(() => (source.state === "ready" ? analyse(source.input) : null), [source]);
   if (!result) return null;
   return (
-    <Card className={`border ${statusBox(result.verdict)}`}>
+    <Card data-model-check-new className={`border ${statusBox(result.verdict)}`}>
       <CardContent className="pt-6 flex flex-wrap items-center justify-between gap-3">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
