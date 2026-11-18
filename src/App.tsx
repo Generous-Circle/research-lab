@@ -55,7 +55,7 @@ function SignIn() {
           <CardDescription>
             {mode === "password" && "Sign in with your study account."}
             {mode === "token" && "Paste a research access token. It starts with crt_."}
-            {mode === "claim" && "We will email a one-day access token for this address."}
+            {mode === "claim" && "We will email you an access token for this address."}
             {mode === "sent" && "Check your inbox."}
           </CardDescription>
         </CardHeader>
@@ -161,7 +161,7 @@ function SignIn() {
           {mode === "sent" && (
             <>
               <p className="text-sm text-muted-foreground">
-                If <strong>{email}</strong> is on a study team, the email is on its way. It is valid for one day.
+                If <strong>{email}</strong> is on a study team, the email is on its way. It stays valid until the study Admin revokes it.
               </p>
               <Button className="w-full" variant="outline" onClick={() => setMode("token")}>
                 I have the token
