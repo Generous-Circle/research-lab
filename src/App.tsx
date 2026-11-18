@@ -22,12 +22,23 @@ function SignIn() {
 
   const submitPassword = async () => {
     if (!email.trim() || !password) return;
+    // The most predictable mistake: paste the emailed token into the password
+    // box. Tokens start with crt_; route them to the token path instead.
+    if (password.trim().startsWith("crt_")) {
+      signInWithToken(password);
+      return;
+    }
     setBusy(true);
     setError(null);
     try {
       await signIn(email, password);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not sign in.");
+      const message = e instanceof Error ? e.message : "Could not sign in.";
+      setError(
+        /invalid login credentials/i.test(message)
+          ? "That email and password did not match. If you were emailed an access token, use \"Use a token\" below."
+          : message,
+      );
     } finally {
       setBusy(false);
     }
