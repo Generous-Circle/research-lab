@@ -61,6 +61,14 @@ export default function App() {
           path="/research-lab/runs/:runId"
           element={token ? <ResearchLab /> : <SignIn />}
         />
+        <Route
+          path="/research-lab/runs/:runId/check"
+          element={token ? <ResearchLab /> : <SignIn />}
+        />
+        <Route
+          path="/research-lab/runs/:runId/check/:metric"
+          element={token ? <ResearchLab /> : <SignIn />}
+        />
         <Route path="*" element={<Navigate to="/research-lab" replace />} />
       </Routes>
       <Toaster />

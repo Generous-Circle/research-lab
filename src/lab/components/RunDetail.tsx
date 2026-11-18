@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ModelCheckCard } from "../modelCheck/ModelCheck";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -150,6 +151,8 @@ export function RunDetail({ runId, who }: { runId: string; who: WhoAmI }) {
           </CardContent>
         </Card>
       )}
+
+      {done && <ModelCheckCard runId={runId} />}
 
       {done && (
         <Card>

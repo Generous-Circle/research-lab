@@ -1,4 +1,4 @@
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { StartHereTab } from "./components/StartHereTab";
 import { DataTab } from "./components/DataTab";
 import { RunsTab } from "./components/RunsTab";
 import { RunDetail } from "./components/RunDetail";
+import { ModelCheck } from "./modelCheck/ModelCheck";
 import { ApiAccessTab } from "./components/ApiAccessTab";
 import { AdminTab } from "./components/AdminTab";
 
@@ -25,7 +26,8 @@ const ROLE_COPY: Record<string, string> = {
 
 export default function ResearchLab() {
   const { user, signOut } = useAuth();
-  const { runId } = useParams<{ runId?: string }>();
+  const { runId, metric } = useParams<{ runId?: string; metric?: string }>();
+  const inCheck = useLocation().pathname.includes("/check");
   const [params, setParams] = useSearchParams();
   const tab = params.get("tab") ?? "start";
   const who = useWhoAmI();
@@ -64,7 +66,9 @@ export default function ResearchLab() {
 
         {who.error && <NoAccess error={who.error} email={user?.email ?? null} userId={user?.id ?? null} />}
 
-        {who.data && runId && <RunDetail runId={runId} who={who.data} />}
+        {who.data && runId && !inCheck && <RunDetail runId={runId} who={who.data} />}
+
+        {who.data && runId && inCheck && <ModelCheck runId={runId} metric={metric} />}
 
         {who.data && !runId && (
           <>
