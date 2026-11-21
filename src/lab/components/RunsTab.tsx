@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BENCHMARK_FIXED } from "../benchmarkMode";
 import { ModelCheckCell, ModelCheckHead } from "../modelCheck/RunsColumn";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
@@ -138,7 +139,7 @@ function NewRunCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Step 4 — Start a scoring run</CardTitle>
+        <CardTitle>{BENCHMARK_FIXED ? "Start a scoring run" : "Step 4 — Start a scoring run"}</CardTitle>
         <CardDescription>
           The VettedAI scorer scores every answer in the version you pick. Use 2–3 repeats to measure consistency
           (same answer, scored again).

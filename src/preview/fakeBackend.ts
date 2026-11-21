@@ -5,12 +5,12 @@ const now = Date.now();
 const ago = (m: number) => new Date(now - m * 60000).toISOString();
 
 const versions = [
-  { id: "ver-1", dataset_kind: "paired", version_number: 1, name: "Benchmark", content_hash: "9f2c41ab", item_count: 1020, rated_answer_count: 1020, has_question_materials: true, frozen_at: ago(3000), retention_delete_after: null },
+  { id: "ver-1", dataset_kind: "paired", version_number: 1, name: "Benchmark (fixed)", content_hash: "9f2c41ab", item_count: 1020, rated_answer_count: 1020, has_question_materials: true, frozen_at: ago(3000), retention_delete_after: null },
 ];
 
 const mk = (id: string, label: string, n: number, minsAgo: number, v: number) => ({
   id, status: "completed", repeat_count: n, answer_count: 1020, projected_calls: 1020 * n, created_at: ago(minsAgo), started_at: ago(minsAgo), completed_at: ago(minsAgo - 20),
-  dataset_version_id: "ver-1", dataset_kind: "paired", dataset_version_number: 1, dataset_name: "Benchmark", scorer_label: label, scorer_version_number: v, completed_count: 1020 * n,
+  dataset_version_id: "ver-1", dataset_kind: "paired", dataset_version_number: 1, dataset_name: "Benchmark (fixed)", scorer_label: label, scorer_version_number: v, completed_count: 1020 * n,
 });
 const runs = [
   mk("e41b7c90-mock-c", "Scorer v2.5-rc", 10, 40, 3),
