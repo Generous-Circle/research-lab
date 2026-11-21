@@ -1,0 +1,3 @@
+question_key,dimension_key,role_key,question_text,scoring_rubric,reference_answer
+t1_backend_engineering_fellow_q01,cognitive_abilities,backend_engineering_fellow,<question text>,"<scoring rubric: what a 0, 1, 2, 3, 4 and 5 look like>",<reference answer that would earn the top score>
+t1_backend_engineering_fellow_q03,execution,backend_engineering_fellow,<question text>,"<scoring rubric: what a 0, 1, 2, 3, 4 and 5 look like>",<reference answer that would earn the top score>
