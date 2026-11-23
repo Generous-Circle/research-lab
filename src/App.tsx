@@ -212,11 +212,11 @@ export default function App() {
         />
         <Route
           path="/research-lab/runs/:runId/check"
-          element={token ? <ResearchLab /> : <SignIn />}
+          element={!ready ? null : signedIn ? <ResearchLab /> : <SignIn />}
         />
         <Route
           path="/research-lab/runs/:runId/check/:metric"
-          element={token ? <ResearchLab /> : <SignIn />}
+          element={!ready ? null : signedIn ? <ResearchLab /> : <SignIn />}
         />
         <Route path="*" element={<Navigate to="/research-lab" replace />} />
       </Routes>

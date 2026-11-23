@@ -17,7 +17,7 @@ export function ModelCheckCell({ runId, completed }: { runId: string; completed:
     <TableCell data-model-check-new>
       <span className="inline-flex items-center gap-2">
         <StatusPill status={v} />
-        <span className="text-xs text-muted-foreground">{VERDICT_TEXT[v]}</span>
+        <span className="text-xs text-muted-foreground">Sample: {VERDICT_TEXT[v]}</span>
       </span>
     </TableCell>
   );

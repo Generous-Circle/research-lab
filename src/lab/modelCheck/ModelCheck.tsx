@@ -95,7 +95,7 @@ export function ModelCheckCard({ runId }: { runId: string }) {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <StatusPill status={result.verdict} />
-            <span className="font-semibold">Model check: {VERDICT_TEXT[result.verdict]}</span>
+            <span className="font-semibold">Model check (sample data): {VERDICT_TEXT[result.verdict]}</span>
           </div>
           <p className="text-sm text-muted-foreground">{checkSummaryLine(result)}</p>
         </div>
