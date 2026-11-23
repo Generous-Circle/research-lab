@@ -16,4 +16,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+        env:
+          VITE_SUPABASE_URL: https://example.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: test-key
       - run: npm run build

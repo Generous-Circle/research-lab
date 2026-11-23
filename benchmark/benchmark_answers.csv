@@ -1,0 +1,12 @@
+answer_ref,candidate_ref,question_key,variant_type,parent_answer_ref,transcript_text,rater_1,rater_2,rater_3
+T1-A0183,T1-C062,t1_backend_engineering_fellow_q01,original,,<original transcript of T1-A0183>,3,3,2
+T1-A0183-JA,T1-C062,t1_backend_engineering_fellow_q01,jargon_added,T1-A0183,<jargon added version of T1-A0183>,,,
+T1-A0183-JR,T1-C062,t1_backend_engineering_fellow_q01,jargon_removed,T1-A0183,<jargon removed version of T1-A0183>,,,
+T1-A0183-FA,T1-C062,t1_backend_engineering_fellow_q01,filler_added,T1-A0183,<filler added version of T1-A0183>,,,
+T1-A0183-FR,T1-C062,t1_backend_engineering_fellow_q01,filler_removed,T1-A0183,<filler removed version of T1-A0183>,,,
+T1-A0183-CB,T1-C062,t1_backend_engineering_fellow_q01,combined,T1-A0183,<combined version of T1-A0183>,,,
+T1-A0284,T1-C037,t1_backend_engineering_fellow_q03,original,,<original transcript of T1-A0284>,4,3,3
+T1-A0284-JA,T1-C037,t1_backend_engineering_fellow_q03,jargon_added,T1-A0284,<jargon added version of T1-A0284>,,,
+T1-A0284-JR,T1-C037,t1_backend_engineering_fellow_q03,jargon_removed,T1-A0284,<jargon removed version of T1-A0284>,,,
+T1-A0284-FA,T1-C037,t1_backend_engineering_fellow_q03,filler_added,T1-A0284,<filler added version of T1-A0284>,,,
+T1-A0284-CB,T1-C037,t1_backend_engineering_fellow_q03,combined,T1-A0284,<combined version of T1-A0284>,,,

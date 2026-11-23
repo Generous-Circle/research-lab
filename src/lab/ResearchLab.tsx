@@ -1,4 +1,4 @@
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,8 @@ import { StartHereTab } from "./components/StartHereTab";
 import { DataTab } from "./components/DataTab";
 import { RunsTab } from "./components/RunsTab";
 import { RunDetail } from "./components/RunDetail";
+import { ModelCheck } from "./modelCheck/ModelCheck";
+import { BENCHMARK_FIXED } from "./benchmarkMode";
 import { ApiAccessTab } from "./components/ApiAccessTab";
 import { AdminTab } from "./components/AdminTab";
 
@@ -19,15 +21,18 @@ import { AdminTab } from "./components/AdminTab";
 
 const ROLE_COPY: Record<string, string> = {
   admin: "Admin: you can approve data, run scoring and manage the team.",
-  researcher: "Researcher: you can upload data, run scoring and export results.",
+  researcher: BENCHMARK_FIXED
+    ? "Researcher: you can run scoring on the fixed benchmark and export results."
+    : "Researcher: you can upload data, run scoring and export results.",
   viewer: "Viewer: you can read and export results.",
 };
 
 export default function ResearchLab() {
   const { user, signOut } = useAuth();
-  const { runId } = useParams<{ runId?: string }>();
+  const { runId, metric } = useParams<{ runId?: string; metric?: string }>();
+  const inCheck = useLocation().pathname.includes("/check");
   const [params, setParams] = useSearchParams();
-  const tab = params.get("tab") ?? "start";
+  const tab = params.get("tab") ?? (BENCHMARK_FIXED ? "runs" : "start");
   const who = useWhoAmI();
 
   const setTab = (t: string) => {
@@ -64,7 +69,9 @@ export default function ResearchLab() {
 
         {who.error && <NoAccess error={who.error} email={user?.email ?? null} userId={user?.id ?? null} />}
 
-        {who.data && runId && <RunDetail runId={runId} who={who.data} />}
+        {who.data && runId && !inCheck && <RunDetail runId={runId} who={who.data} />}
+
+        {who.data && runId && inCheck && <ModelCheck runId={runId} metric={metric} />}
 
         {who.data && !runId && (
           <>
@@ -74,9 +81,9 @@ export default function ResearchLab() {
             </div>
             <Tabs value={tab} onValueChange={setTab}>
               <TabsList className="flex-wrap h-auto">
-                <TabsTrigger value="start">1. Start here</TabsTrigger>
-                <TabsTrigger value="data">2. Data</TabsTrigger>
-                <TabsTrigger value="runs">3. Runs &amp; results</TabsTrigger>
+                {!BENCHMARK_FIXED && <TabsTrigger value="start">1. Start here</TabsTrigger>}
+                {!BENCHMARK_FIXED && <TabsTrigger value="data">2. Data</TabsTrigger>}
+                <TabsTrigger value="runs">{BENCHMARK_FIXED ? "Runs & results" : "3. Runs & results"}</TabsTrigger>
                 <TabsTrigger value="api">API &amp; notebook</TabsTrigger>
                 {can(who.data, "manage_members") && (
                   <TabsTrigger value="admin">Admin</TabsTrigger>

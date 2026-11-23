@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { BENCHMARK_FIXED } from "../benchmarkMode";
+import { ModelCheckCell, ModelCheckHead } from "../modelCheck/RunsColumn";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -49,6 +51,7 @@ export function RunsTab({ who }: { who: WhoAmI }) {
                   <TableHead className="text-right">Answers × repeats</TableHead>
                   <TableHead>Progress</TableHead>
                   <TableHead>Status</TableHead>
+                  <ModelCheckHead />
                   <TableHead />
                 </TableRow>
               </TableHeader>
@@ -68,6 +71,7 @@ export function RunsTab({ who }: { who: WhoAmI }) {
                       {r.completed_count}/{r.projected_calls}
                     </TableCell>
                     <TableCell><RunStatusBadge status={r.status} /></TableCell>
+                    <ModelCheckCell runId={r.id} completed={r.status === "completed"} />
                     <TableCell className="text-right">
                       <Button asChild size="sm" variant="outline">
                         <Link to={`/research-lab/runs/${r.id}`}>Open</Link>
@@ -135,7 +139,7 @@ function NewRunCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Step 4 — Start a scoring run</CardTitle>
+        <CardTitle>{BENCHMARK_FIXED ? "Start a scoring run" : "Step 4 — Start a scoring run"}</CardTitle>
         <CardDescription>
           The VettedAI scorer scores every answer in the version you pick. Use 2–3 repeats to measure consistency
           (same answer, scored again).

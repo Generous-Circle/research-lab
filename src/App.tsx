@@ -210,6 +210,14 @@ export default function App() {
           path="/research-lab/runs/:runId"
           element={!ready ? null : signedIn ? <ResearchLab /> : <SignIn />}
         />
+        <Route
+          path="/research-lab/runs/:runId/check"
+          element={!ready ? null : signedIn ? <ResearchLab /> : <SignIn />}
+        />
+        <Route
+          path="/research-lab/runs/:runId/check/:metric"
+          element={!ready ? null : signedIn ? <ResearchLab /> : <SignIn />}
+        />
         <Route path="*" element={<Navigate to="/research-lab" replace />} />
       </Routes>
       <Toaster />
